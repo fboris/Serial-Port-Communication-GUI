@@ -1,2 +1,3 @@
-USART_Receiver
+Serial Port Communication GUI
 ==============
+
