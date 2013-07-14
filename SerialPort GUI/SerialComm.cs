@@ -53,7 +53,7 @@ namespace SerialPort_GUI
            }
         }
         /// <summary>
-        /// Does the receive.
+        /// This is the function which is called in "receivingThread"
         /// </summary>
         private void DoReceive()
         {
@@ -85,6 +85,11 @@ namespace SerialPort_GUI
                 while (!IsReceiving) Thread.Sleep(10);
             }
         }
+        /// <summary>
+        /// This is the function which is called in receiving thread(field name: "receivingThread")
+        /// #This function is uncomplete.
+        /// </summary>
+        /// <param name="data">The data.</param>
         private void DoPeriodWrite(Object data)
         {
             while (true)
@@ -103,6 +108,10 @@ namespace SerialPort_GUI
                 Thread.Sleep(sleepTime);
             }
         }
+        /// <summary>
+        /// This is the function which is called in writing thread(field name: "writingThread")
+        /// </summary>
+        /// <param name="data">this object was sent by Thread.start method</param>
         private void DoWrite(Object data)
         {
             
@@ -120,17 +129,17 @@ namespace SerialPort_GUI
 
         }
         /// <summary>
-        /// Writes the specified MSG.
+        /// Writes the specified MSG. 
         /// </summary>
-        /// <param name="msg">The MSG.</param>
+        /// <param name="msg"></param>
         new public void Write(string msg)
         {
             
             Byte[] dataBytes = Encoding.ASCII.GetBytes(msg);
             Object o = dataBytes;
-            Thread writing = new Thread(DoWrite);
-            writing.Start(o);
-            writing.IsBackground = true;
+            Thread writingThread = new Thread(DoWrite);
+            writingThread.Start(o);
+            writingThread.IsBackground = true;
 
            
 
@@ -160,7 +169,7 @@ namespace SerialPort_GUI
             
         }
         /// <summary>
-        /// 開啟新的序列埠連線。
+        /// Open port.
         /// </summary>
         /// <PermissionSet>
         ///   <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" />
@@ -182,7 +191,7 @@ namespace SerialPort_GUI
             Thread.Sleep(200);
         }
         /// <summary>
-        /// 關閉連接埠連線，將 <see cref="P:System.IO.Ports.SerialPort.IsOpen" /> 屬性設為 false，並處置內部 <see cref="T:System.IO.Stream" /> 物件。
+        /// close port，let <see cref="P:System.IO.Ports.SerialPort.IsOpen" /> to false
         /// </summary>
         /// <PermissionSet>
         ///   <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" />
@@ -210,7 +219,7 @@ namespace SerialPort_GUI
             
         }
         /// <summary>
-        /// Terminates this instance.
+        /// Terminates this instance. This action will terminate receving thread and close the specific port.
         /// </summary>
         public void Terminate()
         {
